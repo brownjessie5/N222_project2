@@ -1,0 +1,157 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+<style type="text/css" media="screen">
+
+</style>
+
+<title></title>
+
+<script type='text/javascript'>
+
+var bgCanvas = null;
+
+var bgImage = null;
+
+var objImage = null;
+
+var bgCtx = null;
+
+var imgCtx = null;
+
+var objImage = null; 
+
+var y=1;
+
+var x=1;
+
+var bgSave = new Image();
+
+
+
+function onload() { 
+
+	bgCanvas = document.getElementById('marioCanvas');
+
+	bgImage = document.getElementById('bgImage');
+
+	objImage = document.getElementById('objImage');
+
+	resize();
+
+}
+
+function resize() {
+
+	bgCanvas.width = bgCanvas.parentNode.clientWidth;
+
+	bgCanvas.height = bgCanvas.parentNode.clientHeight;
+
+	bgCtx = bgCanvas.getContext("2d"); 
+
+//	var bgImage = new Image;
+
+	bgImage.onload = function() {
+
+//		bgCtx.drawImage(bgImage,0,0,1280,800,0,0,bgCanvas.width,bgCanvas.height);
+
+		bgCtx.drawImage(bgImage,0,0);
+
+	}
+
+	bgImage.src = 'assets/background.png';
+
+//	objImage = new Image;
+
+//	objImage.src = 'assets/Mario-Star.png';
+
+	objImage.src = 'assets/star.png';
+
+//	context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+
+//	x = Math.random() * (bgCanvas.width-128);
+
+	x = Math.random() * (bgImage.width - objImage.width);
+
+	x = Math.floor(x);
+
+//	while (!bgImage.complete || ! objImage.complete) alert('incomplete');
+
+	alert('x=' + x + 'y='+y);
+
+//	bgSave = bgCtx.getImageData(x, y, objImage.width/4,objImage.height/4);
+
+	bgSave = bgCtx.getImageData(x, y, objImage.width,objImage.height);
+
+	drawStar();
+
+} 
+
+function drawStar() {
+
+//	if (y>0) bgCtx.drawImage(bgImage,0,y-1,bgCanvas.width,1,0,y-1,bgCanvas.width,1);
+
+//	bgCtx.clearRect(x,y-1,bgCanvas.width*.03,bgCanvas.width*.03);
+
+//	bgCtx.drawImage(bgImage,x,y-1,bgCanvas.width,1,x,y-1,bgCanvas.width,1);
+
+	bgCtx.putImageData(bgSave,x,y-1);
+
+//	bgSave = bgCtx.getImageData(x, y, bgImage.width,bgImage.height);
+
+//	bgSave = bgCtx.getImageData(x, y, objImage.width/4, objImage.height/4);
+
+//	for (var i=0;i<bgSave.data.length;i+=4)
+
+//    {
+
+//    bgSave.data[i]=255-imgData.data[i];
+
+//    bgSave.data[i+1]=255-imgData.data[i+1];
+
+//    bgSave.data[i+2]=255-imgData.data[i+2];
+
+//    bgSave.data[i+3]=255;
+
+//    }
+
+//	bgCtx.putImageData(bgSave,x,y,128,128);
+
+//	bgSave = bgCtx.getImageData(0,0);
+
+//	bgSave = bgCtx.getImageData(x, y, objImage.width/4,objImage.height/4);
+
+	bgSave = bgCtx.getImageData(x, y, objImage.width,objImage.height);
+
+//	bgCtx.drawImage (objImage,0,0,objImage.width,objImage.height,x,y++,objImage.width/4,objImage.height/4);
+
+	bgCtx.drawImage (objImage,0,0,objImage.width,objImage.height,x,y++,objImage.width,objImage.height);
+
+//	bgCtx.drawImage (objImage,x,y++);
+
+//	y+=127;
+
+//	bgCtx.drawImage (objImage,x,y++);
+
+	setTimeout(drawStar,10);
+
+}
+
+</script>
+
+
+
+
+
+</head>
+
+<body onload='onload()' onresize='resize()' style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>
+
+<canvas id="marioCanvas"><img id="bgImage"><img id="objImage"></canvas>
+
+</body>
+
+</html>

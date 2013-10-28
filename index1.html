@@ -1,0 +1,108 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+
+
+<script>
+/*
+function resize_canvas(){
+            canvas = document.getElementById("canvas");
+            if (canvas.width  < window.innerWidth)
+            {
+                canvas.width  = window.innerWidth;
+            }
+
+            if (canvas.height < window.innerHeight)
+            {
+                canvas.height = window.innerHeight;
+            }
+        }
+*/
+
+
+var bgCanvas = null;
+
+var bgCtx = null;
+
+var imgCtx = null;
+
+var starObj = null; 
+
+var y=0;
+
+var x=0;
+
+function onload() { 
+
+	bgCanvas = document.getElementById('marioCanvas');
+
+	resize();
+
+}
+
+function resize() {
+
+	bgCanvas.width = bgCanvas.parentNode.clientWidth;
+
+	bgCanvas.height = bgCanvas.parentNode.clientHeight;
+
+	bgCtx = bgCanvas.getContext("2d"); 
+
+	var backgroundObj = new Image;
+
+	backgroundObj.onload = function() {
+
+		bgCtx.drawImage(backgroundObj,0,0,1280,800,0,0,bgCanvas.width,bgCanvas.height);
+		
+
+
+	}
+//backgroundObj.src = 'assets/background.png';
+starObj = new Image;
+
+	starObj.src = 'assets/star.png';
+
+//	context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+
+	x = Math.random() * (bgCanvas.width-512);
+
+	drawStar();
+
+} 
+
+function drawStar() {
+
+//	if (y>0) bgCtx.drawImage(backgroundObj,0,y-1,bgCanvas.width,1,0,y-1,bgCanvas.width,1);
+
+	bgCtx.drawImage (starObj,0,0,512,512,x,y++,bgCanvas.width*.03,bgCanvas.width*.03);
+
+	setTimeout(drawStar,10);
+
+}
+
+</script>
+
+
+
+        <style type="text/css">
+		
+		
+    #marioCanvas{
+        background-image: url(assets/background.png);
+	 
+        background-repeat: no-repeat;
+        background-position: top left;
+         }
+</style>
+
+
+</head>
+
+<body>    
+<body onload='onload()' onresize='resize()' style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>
+
+<canvas id="marioCanvas"></canvas>
+</body>
+</html>
