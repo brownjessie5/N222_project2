@@ -60,7 +60,11 @@ function onload() {
 
             
             function update() {
+<<<<<<< HEAD
                
+=======
+                bgCtx.clearRect(0,0,400,300);
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
                 mySprite.update();
                 
                 if(keys[37]) {
@@ -74,7 +78,10 @@ function onload() {
                 }
                 
                 requestAnimationFrame(update);
+<<<<<<< HEAD
 				//Sprite.anchor.setTo(.5, 0);
+=======
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
             }
             
             document.addEventListener('keydown', function(event) {
@@ -97,9 +104,13 @@ function onload() {
                     me.perLine = Math.floor( me.image.width / swidth );
                     //calc number of lines
                     me.rows = Math.floor( me.image.height / sheight );
+<<<<<<< HEAD
 					//mySprite.anchor.setTo(.5, 0);
                 });
 				
+=======
+                });
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
                 
                 me.width = swidth;
                 me.height = sheight;
@@ -121,7 +132,10 @@ function onload() {
                         //set row & col position
                         this.framePosition.row = Math.floor( me.animations[me.curAnimation][me.curFrame] / me.perLine );
                         this.framePosition.col = me.animations[me.curAnimation][me.curFrame] % me.perLine;
+<<<<<<< HEAD
 						//mySprite.anchor.setTo(.5, 0);
+=======
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
                     }
                     
                     bgCtx.save();
@@ -133,7 +147,11 @@ function onload() {
             }
             
             Sprite.prototype.x = 0;
+<<<<<<< HEAD
             Sprite.prototype.y = 601;
+=======
+            Sprite.prototype.y = 0;
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
             Sprite.prototype.curFrame = 0;
             Sprite.prototype.width = 0;
             Sprite.prototype.height = 0;
@@ -148,14 +166,20 @@ function onload() {
             
             Sprite.prototype.addAnimation = function(name, frames) {
                 this.animations[name] = frames;
+<<<<<<< HEAD
 				
+=======
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
             }
             
             Sprite.prototype.play =  function(name) {
                 this.dcount = this.delay;
                 this.curFrame = 0;
                 this.curAnimation = name;
+<<<<<<< HEAD
 				
+=======
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
             }
 
  
@@ -174,8 +198,14 @@ function drawStar() {
  
  
 </head>
+<<<<<<< HEAD
 <body onload='onload()'  style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>
 <canvas id="marioCanvas"><img id="bgImage"><img id="objImage">
 </canvas>
+=======
+<body onload='onload()' onresize='resize()' style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>
+<canvas id="marioCanvas"><img id="bgImage"><img id="objImage">
+<canvas id="myCanv" width="400" height="300"></canvas></canvas>
+>>>>>>> 17d81e4873ce787ce3319c1f49209373bd95648f
 </body>
 </html>
