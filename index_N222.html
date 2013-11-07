@@ -1,0 +1,319 @@
+<!doctype html>
+
+<html>
+
+<head>
+
+<style type="text/css" media="screen">
+
+</style>
+
+<title></title>
+
+<script type='text/javascript'>
+
+var bgCanvas = null;
+
+var bgImage = null;
+
+var objImage = null;
+
+var bgCtx, mySprite = null;
+
+var imgCtx = null;
+
+var objImage = null;
+
+var y = 1;
+
+var x = 0;
+
+var keys = {};
+
+
+
+function onload() {
+
+	bgCanvas = document.getElementById('marioCanvas');
+
+	//bgCanvas.width = bgCanvas.parentNode.clientWidth;
+
+	//bgCanvas.height = bgCanvas.parentNode.clientHeight;
+
+	bgCanvas.width = 1280;
+
+	bgCanvas.height = 800;
+
+	bgImage = document.getElementById('bgImage');
+
+	objImage = document.getElementById('objImage');
+
+	bgCtx = bgCanvas.getContext("2d");
+
+
+
+	bgImage.onload = function () {
+
+		bgCtx.drawImage(bgImage, 0, 0, 1280, 800, 0, 0, 1280, 800);
+
+		objImage.src = 'assets/mario-star.png';
+
+	}
+
+
+
+	objImage.onload = function () {
+
+		mySprite = new Sprite("assets/sprite_mario.png", 43, 60);
+
+		mySprite.addAnimation("walk", [2, 1, 0]);
+
+		mySprite.play("walk");
+
+		requestAnimationFrame(update);
+
+		drawStar();
+
+	}
+
+	bgImage.src = 'assets/background.png';
+
+}
+
+
+
+function update() {
+
+	mySprite.update();
+
+
+
+	if (keys[37]) {
+
+		mySprite.scale.x = -1;
+
+		if (mySprite.x > 0 + mySprite.width)
+
+			mySprite.x = mySprite.x - 10;
+
+	}
+
+
+
+	if (keys[39]) {
+
+		mySprite.scale.x = 1;
+
+		if (mySprite.x < 1280 - mySprite.width)
+
+			mySprite.x = mySprite.x + 10;
+
+	}
+
+
+
+	requestAnimationFrame(update);
+
+}
+
+
+
+document.addEventListener('keydown', function (event) {
+
+	keys[event.keyCode] = true;
+
+});
+
+
+
+document.addEventListener('keyup', function (event) {
+
+	keys[event.keyCode] = false;
+
+});
+
+
+
+function Sprite(sheetUrl, swidth, sheight) {
+
+
+
+	var me = this;
+
+
+
+	this.image = new Image();
+
+	this.image.src = sheetUrl;
+
+
+
+	this.image.addEventListener("load", function () {
+
+		//calc number of frames per line
+
+		me.perLine = Math.floor(me.image.width / swidth);
+
+		//calc number of lines
+
+		me.rows = Math.floor(me.image.height / sheight);
+
+	});
+
+
+
+	me.width = swidth;
+
+	me.height = sheight;
+
+
+
+	this.update = function () {
+
+
+
+		//position
+
+
+
+		//draw
+
+		this.dcount++;
+
+		if (this.dcount >= this.delay) {
+
+			this.dcount = 0;
+
+			this.curFrame++;
+
+
+
+			if (this.curFrame >= me.animations[me.curAnimation].length) {
+
+				this.curFrame = 0;
+
+			}
+
+
+
+			//set row & col position
+
+			this.framePosition.row = Math.floor(me.animations[me.curAnimation][me.curFrame] / me.perLine);
+
+			this.framePosition.col = me.animations[me.curAnimation][me.curFrame] % me.perLine;
+
+		}
+
+
+
+		bgSpriteSave = bgCtx.getImageData(x * this.scale.x, 1, objImage.width, bgCanvas.height);
+
+		bgCtx.drawImage(bgImage, 0, this.y, bgImage.width, me.height, 0, this.y, bgImage.width, me.height);
+
+
+
+		bgCtx.save();
+
+		//ctx.translate(me.width,0);
+
+		bgCtx.scale(me.scale.x, me.scale.y); // Allow Sprite to walk both directions
+
+		bgCtx.drawImage(mySprite.image, this.framePosition.col * me.width, this.framePosition.row * me.height, me.width, me.height, this.scale.x * this.x, this.scale.y * this.y, me.width, me.height);
+
+		bgCtx.restore();
+
+	}
+
+}
+
+
+
+Sprite.prototype.x = 0;
+
+Sprite.prototype.y = 663;
+
+Sprite.prototype.curFrame = 0;
+
+Sprite.prototype.width = 0;
+
+Sprite.prototype.height = 0;
+
+Sprite.prototype.delay = 10;
+
+Sprite.prototype.dcount = 0;
+
+Sprite.prototype.perLine = 0;
+
+Sprite.prototype.rows = 0;
+
+Sprite.prototype.framePosition = {
+
+	col : 0,
+
+	row : 0
+
+};
+
+Sprite.prototype.curAnimation = "";
+
+Sprite.prototype.animations = [];
+
+Sprite.prototype.scale = {
+
+	x : 1,
+
+	y : 1
+
+};
+
+
+
+Sprite.prototype.addAnimation = function (name, frames) {
+
+	this.animations[name] = frames;
+
+}
+
+
+
+Sprite.prototype.play = function (name) {
+
+	this.dcount = this.delay;
+
+	this.curFrame = 0;
+
+	this.curAnimation = name;
+
+}
+
+
+
+function drawStar() {
+
+	bgCtx.drawImage(bgImage, x, 1, objImage.width * .125, bgCanvas.height, x, 1, objImage.width * .125, bgCanvas.height);
+
+	y += 5;
+
+	bgCtx.drawImage(objImage, 0, 0, objImage.width, objImage.height, x, y, objImage.width * .125, objImage.height * .125);
+
+	if (y<800) setTimeout(drawStar,50);
+
+}
+
+</script>
+
+ 
+
+ 
+
+</head>
+
+<body onload='onload()' onresize='resize()' style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>
+
+<canvas id="marioCanvas"><img id="bgImage"><img id="objImage">
+
+</canvas>
+
+</body>
+
+</html>

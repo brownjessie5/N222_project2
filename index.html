@@ -1,0 +1,267 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Untitled Document</title>
+<script type='text/javascript'>
+
+
+
+
+
+
+
+var bgCanvas = null;
+var bgCtx = null;
+var imgCtx = null;
+var starObj = null; 
+var y=0;
+var x=0;
+
+function onload() { 
+
+ var canvas = document.getElementById("marioCanv");
+               // ctx = canvas.getContext('2d');
+
+	
+	
+	
+	
+	
+	
+	//bgCanvas = document.getElementById('marioCanvas');
+
+	resize();
+
+}
+
+function resize() {
+
+	bgCanvas.width = bgCanvas.parentNode.clientWidth;
+
+	bgCanvas.height = bgCanvas.parentNode.clientHeight;
+
+	bgCtx = bgCanvas.getContext("2d"); 
+
+	var backgroundObj = new Image;
+
+	backgroundObj.onload = function() {
+
+		bgCtx.drawImage(backgroundObj,0,0,1280,800,0,0,bgCanvas.width,bgCanvas.height);
+
+	}
+
+	backgroundObj.src = 'assets/background.png';
+
+	starObj = new Image;
+
+	starObj.src = 'assets/star.png';
+
+//	context.drawImage(img,sx,sy,swidth,sheight,x,y,width,height);
+
+	x = Math.random() * (bgCanvas.width-512);
+
+	drawStar();
+
+} 
+
+function drawStar() {
+
+//	if (y>0) bgCtx.drawImage(backgroundObj,0,y-1,bgCanvas.width,1,0,y-1,bgCanvas.width,1);
+
+	bgCtx.drawImage (starObj,0,0,512,512,x,y++,bgCanvas.width*.03,bgCanvas.width*.03);
+
+	setTimeout(drawStar,10);
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+ var ctx, mySprite;
+            var keys = {};
+            
+            function init() {
+                
+                var canvas = document.getElementById("myCanv");
+                ctx = canvas.getContext('2d');
+                mySprite = new Sprite("assets/sprite_mario.png", 43, 60);
+                mySprite.addAnimation("walk", [2,1,0]);
+                //mySprite.addAnimation("walk", [1]);
+                mySprite.play("walk");
+				Sprite.anchor.setTo(.5, 0);
+                
+               requestAnimationFrame(update);
+            }
+            
+            function update() {
+                ctx.clearRect(0,0,400,300);
+                mySprite.update();
+                
+                if(keys[37]) {
+                    mySprite.scale.x = -1;
+                    mySprite.x --;
+                }
+                
+                if(keys[39]) {
+                    mySprite.scale.x = 1;
+                    mySprite.x ++;
+                }
+                
+                requestAnimationFrame(update);
+            }
+            
+            document.addEventListener('keydown', function(event) {
+                keys[event.keyCode] = true;
+            });
+            
+            document.addEventListener('keyup', function(event) {
+                keys[event.keyCode] = false;
+            });
+            
+            function Sprite(sheetUrl, swidth, sheight) {
+                
+                var me = this;
+                
+                this.image = new Image();
+                this.image.src = sheetUrl;
+                
+                this.image.addEventListener("load", function() {
+                    //calc number of frames per line
+                    me.perLine = Math.floor( me.image.width / swidth );
+                    //calc number of lines
+                    me.rows = Math.floor( me.image.height / sheight );
+                });
+                
+                me.width = swidth;
+                me.height = sheight;
+                
+                this.update = function() {
+                    
+                    //position
+                    
+                    //draw
+                    this.dcount ++;
+                    if(this.dcount >= this.delay) {
+                        this.dcount = 0;
+                        this.curFrame ++;
+                        
+                        if(this.curFrame >= me.animations[me.curAnimation].length) {
+                            this.curFrame = 0;
+                        }
+                        
+                        //set row & col position
+                        this.framePosition.row = Math.floor( me.animations[me.curAnimation][me.curFrame] / me.perLine );
+                        this.framePosition.col = me.animations[me.curAnimation][me.curFrame] % me.perLine;
+                    }
+                    
+                    ctx.save();
+                    //ctx.translate(me.width,0);
+                    ctx.scale(me.scale.x, me.scale.y);
+                    ctx.drawImage(mySprite.image, this.framePosition.col * me.width, this.framePosition.row * me.height, me.width, me.height, this.scale.x * this.x, this.scale.y * this.y, me.width, me.height);
+                    ctx.restore();
+                }
+            }
+            
+            Sprite.prototype.x = 0;
+            Sprite.prototype.y = 0;
+            Sprite.prototype.curFrame = 0;
+            Sprite.prototype.width = 0;
+            Sprite.prototype.height = 0;
+            Sprite.prototype.delay = 10;
+            Sprite.prototype.dcount = 0;
+            Sprite.prototype.perLine = 0;
+            Sprite.prototype.rows = 0;
+            Sprite.prototype.framePosition = {col:0, row:0};
+            Sprite.prototype.curAnimation = "";
+            Sprite.prototype.animations = [];
+            Sprite.prototype.scale = { x: 1, y: 1 };
+	
+			//Sprite.anchor.setTo(.5, 0); //center flip area
+            
+            Sprite.prototype.addAnimation = function(name, frames) {
+                this.animations[name] = frames;
+            }
+            
+            Sprite.prototype.play =  function(name) {
+                this.dcount = this.delay;
+                this.curFrame = 0;
+                this.curAnimation = name;
+            }
+			
+
+
+	
+			/*
+			
+			var srcArray=["assets/star.png","assets/boo.png","assets/goomba.png","textures/mushroom.png", "assets/fireflower.png", "assets/bullet_bill.png"];
+var imgArray=[];
+var assetsArray=[];
+function textures(ctx){
+randomArray();
+    for(var i=0;i<srcArray.length;i++){
+        imgArray[i]=new Image();
+        imgArray[i].src=srcArray[i];
+        imgArray[i].onload=drawObjects(ctx,i);
+    }
+}
+function randomArray() {
+for (var i=0; i<=(xValue/tileSize); i++) {
+    assetsArray[i] = [];
+    for (var j=0; j<=(yValue/tileSize); j++) {
+        assetsArray[i][j]=Math.floor(Math.random()*srcArray.length);
+
+    }
+}
+}
+
+var drawObjects = function(ctx,index) {
+return function() {
+    for (var i=0; i<=(xValue/tileSize); i++) {
+        for (var j=0; j<=(yValue/tileSize); j++) {
+            if (assetsArray[i][j] == index) {
+                ctx.drawImage(imgArray[index],i*tileSize,j*tileSize);
+            }
+        }
+    }
+}
+}
+			
+*/
+            window.onload = init;
+			
+			
+			
+			//window.onload= setup();
+   //
+	 
+     
+     </script>
+        <style type="text/css">
+		
+		
+    #marioCanv {
+        background-image: url(assets/background.png);
+        background-repeat: no-repeat;
+        background-position: top left;
+         }
+</style>
+        
+    </head>
+   
+   <body onload='onload()' onresize='resize()' style='position: absolute; padding:0; margin:0; height: 100%; width:100%'>    
+ 
+        <canvas id="myCanv"></canvas>
+<canvas id="marioCanvas"></canvas>
+
+<canvas id="canvasRegn" width="600" height="450"style="margin:100px;"></canvas>
+    
+</body>
+</html>
